@@ -24,13 +24,13 @@ public class LoadedDie {
 	 *                            the loaded number (instead of uniform random)
 	 */
 	
-	public Die(int numSides) bukk
+	public Die(int numSides)
 	{
 		sides = numSides;
 		roll();
 	}
 	
-	/**
+	/** 
 	 * The roll method simulates the rolling of
 	 * the die
 	 * @param args
