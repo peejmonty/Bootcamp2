@@ -10,7 +10,7 @@ import java.util.Scannerjj;
 
 /**
  * 
- * @author Phillip J Viens
+ * @author Phillip J Viens testing testing 
  *
  */
 public class LoadedDie {
