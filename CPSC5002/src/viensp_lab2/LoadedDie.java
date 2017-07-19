@@ -6,7 +6,6 @@ package viensp_lab2;
 */
 
 import java.util.Random;
-import java.util.Scannerjj;
 
 /**
  * 
@@ -24,7 +23,7 @@ public class LoadedDie {
 	 *                            the loaded number (instead of uniform random)
 	 */
 	
-	public Die(int numSides)
+	public LoadedDie(int numSides)
 	{
 		sides = numSides;
 		roll();
@@ -58,7 +57,7 @@ public class LoadedDie {
 	
 	/**
 	 * getValue method
-	 * @return The valuie of the die.
+	 * @return The value of the die.
 	 */
 	
 	public int getValue()
