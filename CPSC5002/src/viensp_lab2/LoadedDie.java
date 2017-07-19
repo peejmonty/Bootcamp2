@@ -24,7 +24,7 @@ public class LoadedDie {
 	 *                            the loaded number (instead of uniform random)
 	 */
 	
-	public Die(int numSides)
+	public Die(int numSides) bukk
 	{
 		sides = numSides;
 		roll();
