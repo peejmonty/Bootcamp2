@@ -14,7 +14,7 @@ import java.util.Random;
  */
 public class LoadedDie {
 	private int sides;   //Number of sides
-	private int value;   //The die's calue
+	private int value;   //The die's value
 	
 	/**
 	 * The constructor performs an initial roll of the die.
