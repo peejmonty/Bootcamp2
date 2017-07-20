@@ -9,8 +9,8 @@ public class GuessGame {
 	
 	public GuessGame (int INT_LO, int INT_HI) {
 		
-		loRange = INT_LO;
-		hiRange = INT_HI;
+		loRange = INT_LO + 1;
+		hiRange = INT_HI + 1;
 		newNumber();
 	}
 	
@@ -18,7 +18,7 @@ public class GuessGame {
 		//Creates a random object
 		Random rand = new Random();
 		
-		newInteger = rand.nextInt((hiRange*2) +1) - loRange;
+		newInteger = rand.nextInt(hiRange- loRange) + loRange;
 	}
 	
 	public int getNewInteger() {
