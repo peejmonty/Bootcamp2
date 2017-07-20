@@ -9,7 +9,8 @@ import java.util.Random;
 /**
  * Lab2 DiceGame
  * purpose: Create a Dice roll game between the user and the computer.
- * The only catch is the dice are weighted. 30% of the time the computer
+ * The only catch is the 
+ * dice are weighted. 30% of the time the computer
  * will always roll a six, and 30% of the time the user will always roll a 1.
 * @author Phillip Viens
  */
