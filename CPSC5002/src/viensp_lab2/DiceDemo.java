@@ -7,24 +7,26 @@ package viensp_lab2;
 import java.util.Scanner;
 public class DiceDemo {
 /** 
+ * Lab2 DiceGame
+ * purpose: Create a Dice roll game between the user and the computer.
+ * The only catch is the dice are weighted. 30% of the time the computer
+ * will always roll a six, and 30% of the time the user will always roll a 1.
 * @author Phillip Viens
 *
 */
 	public static void main(String[] args)
 	{
 		Scanner kbd = new Scanner(System.in);
-		final int DIE1_SIDES = 6;    // Number of sides for die # 1
-		final int DIE2_SIDES = 6;   // Number of sides for die # 2
-		final int MAX_ROLLS = 10;     // Number of times to roll
-		int computerCount = 0;
-		int userCount = 0;
-		int tieCount = 0;
-		String input;
+		final int LOADED1 = 6;    //Weighted side for die # 1
+		final int LOADED2 = 1;    //Weighted side for die # 2 
+		final int MORE_THAN = 30;   //Initializes 30 times out of 100 rule
+		final int MAX_ROLLS = 10;   // Number of times to roll
+		String input;   //initializes String input for Do/While
 		char repeat;
 		
 		// Create two instances of the Die class
-		LoadedDie die1 = new LoadedDie(DIE1_SIDES);
-		LoadedDie die2 = new LoadedDie(DIE2_SIDES);
+		LoadedDie die1 = new LoadedDie(LOADED1, MORE_THAN);
+		LoadedDie die2 = new LoadedDie(LOADED2, MORE_THAN);
 		
 		//Display the initial state of the dice.
 		System.out.println("This is a game of you versus the computer. "
@@ -33,14 +35,16 @@ public class DiceDemo {
 				+ "the higher number of wins is the grand winner.");
 		System.out.println();
 		System.out.println();
-		
-		//System.out.println("Initial value of the dice:");
-		//System.out.println(die1.getValue() + " " + die2.getValue());
-		
+
 		//Roll the dice 10 times. 
 		System.out.println("Rolling the dice " + MAX_ROLLS + " times.");
 		System.out.println();
+		
+		//Repeats while user specifies to
 		do {
+			int computerWinCount = 0;
+			int userWinCount = 0;
+			int tieCount = 0;
 			for (int i = 0; i < MAX_ROLLS; i++)
 			{
 				//Roll the dice.
@@ -53,37 +57,36 @@ public class DiceDemo {
 				System.out.println("You rolled a " + die2.getValue());
 				System.out.println();
 			
+				//Checks to see whether the user or computer won
+				//Then tallies the results.
 				if (die1.getValue() > die2.getValue())
 				{
-					computerCount ++;
+					computerWinCount ++;
 				}
 				else if (die2.getValue() > die1.getValue())
 				{
-					userCount ++;
+					userWinCount ++;
 				}
 				else
 				{
 					tieCount ++;
 				}
-				//Display the values of the dice.
-				//System.out.println(die1.getValue() + " " + die2.getValue());
 			}
-		
-			System.out.println("I won " + computerCount + " times!");
-			System.out.println("You won " + userCount + " times!");
-		
+			System.out.println("I won " + computerWinCount + " time(s)!");
+			System.out.println("You won " + userWinCount + " time(s)!");
+			
+			//Checks to see if there was a tie at all. 
 			if (tieCount > 0)
 			{
-				System.out.println("We also tied " + tieCount + " times!");
-			
-				computerCount += tieCount;
-				userCount += tieCount;
+				System.out.println("We also tied " + tieCount + " time(s)!");
+				computerWinCount += tieCount;
+				userWinCount += tieCount;
 			}
-			if ( computerCount > userCount)
+			if ( computerWinCount > userWinCount)
 			{
 				System.out.println("The grand winner is Me!");
 			}
-			else if (userCount > computerCount)
+			else if (userWinCount > computerWinCount)
 			{
 				System.out.println("The grand winner is You!");
 			}
@@ -91,12 +94,11 @@ public class DiceDemo {
 			{
 				System.out.println("Looks like we tied!");
 			}
-			
 			System.out.println();
 			System.out.println("Play again (y/n)? ");
 			input = kbd.nextLine();
 			repeat = input.charAt(0);
-			
 		} while (repeat == 'y' || repeat == 'Y');
+		kbd.close();
 	}
 }
