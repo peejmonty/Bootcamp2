@@ -8,11 +8,8 @@ import java.util.Scanner;
 public class DiceDemo {
 /** 
  * Lab2 DiceGame
- * purpose: Create a Dice roll game between the user and the computer.
- * The only catch is the dice are weighted. 30% of the time the computer
- * will always roll a six, and 30% of the time the user will always roll a 1.
+ * purpose: Using the LoadedDie class write a game that has the user play against the computer. 
 * @author Phillip Viens
-*
 */
 	public static void main(String[] args)
 	{
