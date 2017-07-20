@@ -5,7 +5,8 @@ package viensp_lab2;
 * This is free and unencumbered software released into the public domain.
 */
 import java.util.Scanner;
-public class DiceDemo {
+
+public class DiceGame {
 
 /** 
 * Lab2 DiceGame
