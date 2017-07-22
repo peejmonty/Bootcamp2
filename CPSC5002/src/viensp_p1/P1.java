@@ -7,18 +7,27 @@ public class P1 {
 		final int MAX = 3;
 		int row;
 		int col;
+		String[] players = players();
 		
-		String PlayerX = "X";
-		String PlayerO = "O";
-		
-		TicTacToe playerX = new TicTacToe(MAX, PlayerX);
-		TicTacToe playerO = new TicTacToe(MAX, PlayerO);
+		TicTacToe game = new TicTacToe(players);
 		//TicTacToe.displayGameBoard(MAX, playsArray);
-		row = playerX.row();
-		row = playerO.row();
+		//row = playerX.row();
+		//row = playerO.row();
+		//TicTacToe.displayGameBoard();
 		
-		
-
 	}
+		
+		public static String[] players() {
+			final int MAX = 2;
+			String[] players = new String[MAX];
+			
+			players[0] = "X";
+			players[1] = "O";
+			
+			return players;
+			
+		}
+		
+		
 
 }
