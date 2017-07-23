@@ -54,7 +54,7 @@ import java.util.Scanner;
 			kbd.nextLine();
 			//gameboardArray[row][col] = XsOs[i];
 			
-			while (gameboardArray[row][col] != null) {
+			while (gameboardArray[row][col] == "X" || gameboardArray[row][col] == "O") {
 				
 				System.out.println("Space already used... Cheater");
 				System.out.print("Which Row: ");
@@ -63,9 +63,9 @@ import java.util.Scanner;
 				System.out.print("Which Column: ");
 				col = kbd.nextInt();
 				kbd.nextLine();
-				gameboardArray[row][col] = XsOs[i];
+				//gameboardArray[row][col] = XsOs[i];
 			}
-			//gameboardArray[row][col] = XsOs[i];
+			gameboardArray[row][col] = XsOs[i];
 
 			displayGameBoard(gameboardArray);
 		}
