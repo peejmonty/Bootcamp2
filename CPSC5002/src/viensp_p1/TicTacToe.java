@@ -72,6 +72,24 @@ import java.util.Scanner;
 		return gameboardArray;
 		
 	}
+	
+	public boolean searchRow(int row) {
+		}
+		
+			
+		}
+		for (int i = 0; i < MAX; i++) {
+			for (int l = 0; l < MAX; l++) {
+				if (gameboardArray[i][l]
+						
+				
+		
+		
+			}
+		}
+		
+		return flag;
+	}
 	/*
 	public String[][] playerO(Scanner kbd, String[][] gameboardArray) {
 		
