@@ -1,38 +1,40 @@
 package viensp_p1;
 
 import java.util.Scanner;
-
 /*
 * CPSC 5002, Seattle University
 * This is free and unencumbered software released into the public domain
 */
 public class TicsTacsToes {
-	
-	private String[][] gameboardArray;
-	private Scanner kbd;
+	public String[][] gameboardArray;
+	public Scanner kbd;
+	public  int MAX;
 	private boolean flag;
 	private int row;
 	private int col;
-	int MAX;
+	
 	/**
 	 * The Constructor. Will take in the size of the TicTacToe Board.
-	 * have a static game board.
+	 * 
 	*/
-	 
-	
 	public TicsTacsToes(Scanner kbd, int MAX) {
 		this.kbd = kbd;
 		this.MAX = MAX;
-		gameboardArray = new String[MAX][MAX];
-		gamePlay(kbd, gameboardArray);
 	}
 	
+	/**
+	 * gamePlay method. Counts the number of turns up to 9 turns switching 
+	 * between users each time. Using the CheckForWinner method. 
+	 * The board is monitored for winner. 
+	 * @param kbd is a scanner that allows user to input the move
+	 * @param gameboardArray takes in the array of the gameboard moves
+	 */
 	public void gamePlay(Scanner kbd, String[][] gameboardArray) {
 		int playTurnCounter = 0;
-		int MaxPlays = 9;
+		int MaxNumberOfPlays = 9;
 		String player;
+		displayGameBoard(gameboardArray);
 		do {
-			displayGameBoard(gameboardArray);
 			if (playTurnCounter % 2 == 0) {
 				player = "X";
 			}
@@ -47,23 +49,26 @@ public class TicsTacsToes {
 			kbd.nextLine();
 			while (gameboardArray[row][col] == "X" 
 					|| gameboardArray[row][col] == "O") {
-				
 				System.out.println("Space already used... Cheater");
 				System.out.print("Which Row: ");
 				row = kbd.nextInt();
-			
 				System.out.print("Which Column: ");
 				col = kbd.nextInt();
 				kbd.nextLine();
 			}
 			gameboardArray[row][col] = player;
-			flag = checkForWinner(playTurnCounter, MaxPlays, gameboardArray, player);
-			System.out.println("Checks " + flag);
+			displayGameBoard(gameboardArray);
+			flag = checkForWinner(playTurnCounter, MaxNumberOfPlays, 
+					gameboardArray, player);
 			playTurnCounter ++;
 		} while(flag == false);
 		System.out.println("Winner has been found");
 	}
 	
+	/**
+	 * displays the TicTacToe grid and all moves made within the grid.
+	 * @param gameboardArray takes in the Array of moves by each player
+	 */
 	public void displayGameBoard(String[][] gameboardArray) {
 		int i;
 		int l;
@@ -96,7 +101,15 @@ public class TicsTacsToes {
 		}
 	}
 	
-	public boolean checkForWinner(int playTurnCounter, int MaxPlays, 
+	/**
+	 *  
+	 * @param playTurnCounter
+	 * @param MaxNumberOfPlays
+	 * @param gameboardArray
+	 * @param player
+	 * @return
+	 */
+	public boolean checkForWinner(int playTurnCounter, int MaxNumberOfPlays, 
 			String[][] gameboardArray, String player) {
 			if (checkRows(gameboardArray, player)){
 				return true;
@@ -110,13 +123,12 @@ public class TicsTacsToes {
 			else if(checkBottomToTop(gameboardArray, player)) {
 				return true;
 			}
-			else if(checkForNull(playTurnCounter, MaxPlays)) {
+			else if(checkForNull(playTurnCounter, MaxNumberOfPlays)) {
 				return true;
 			}
 			else {
 				return false;
 			}
-			
 	}
 	
 	public boolean checkColumns( String[][] gameboardArray, String player) {
@@ -125,21 +137,16 @@ public class TicsTacsToes {
 		
 		for(int i = 0; i < MAX; i++) {
 			flagCounter = 0;
-			//System.out.println("Stage one, player " + player);
 			for (int l = 0; l < MAX; l ++){
 				if (gameboardArray[l][i] == player) {
 					flagCounter ++;	
 				}
-				//System.out.println("flagCounter = " + flagCounter);
 				if (flagCounter == MAX) {
 					flag = true;
-					//System.out.println("returning " + flagCounter + " " + flag);
 					return flag;
 				}
-				//System.out.println(flag);
 			}
 		}
-		//System.out.println("returning " + flag);
 		return flag;
 		
 			
@@ -148,25 +155,18 @@ public class TicsTacsToes {
 	public boolean checkRows(String[][] gameboardArray, String player) {
 		boolean flag = false;
 		int flagCounter;
-		//System.out.println("Check rows");
-		
 		for(int i = 0; i < MAX; i++) {
 			flagCounter = 0;
-			//System.out.println("Stage one, player " + player);
 			for (int l = 0; l < MAX; l ++){
 				if (gameboardArray[i][l] == player) {
 					flagCounter ++;	
 				}
-				//System.out.println("flagCounter = " + flagCounter);
 				if (flagCounter == MAX) {
 					flag = true;
-					//System.out.println("returning " + flagCounter + " " + flag);
 					return flag;
 				}
-				//System.out.println(flag);
 			}
 		}
-		//System.out.println("returning " + flag);
 		return flag;
 	}
 	
@@ -174,23 +174,16 @@ public class TicsTacsToes {
 		boolean flag = false;
 		int flagCounter = 0;
 		int i;
-		//System.out.println("Check ttb");
-		
 		for(i = 0; i < MAX; i++) {
 				if (gameboardArray[i][i] == player) {
 					flagCounter ++;	
 				}
-				//System.out.println("flagCounter = " + flagCounter);
 				if (flagCounter == MAX) {
 					flag = true;
-					//System.out.println("returning " + flagCounter + " " + flag);
 					return flag;
 				}
-				//System.out.println(flag);
 			}
-		//System.out.println("returning " + flag);
 		return flag;
-		
 		}
 		
 		public boolean checkBottomToTop(String[][] gameboardArray, String player) {
@@ -198,27 +191,19 @@ public class TicsTacsToes {
 			int flagCounter = 0;
 			int NEWMAX = MAX - 1;
 			int i;
-			//System.out.println("Checks btt");
-			
 			for (i = NEWMAX; i >= 0; i--) {
 				if (gameboardArray[NEWMAX-i][i] == player) {
 					flagCounter ++;
 				}
-				//System.out.println("flagCounter = " + flagCounter);
 				if (flagCounter == MAX) {
 					flag = true;
-					//System.out.println("returning " + flagCounter + " " + flag);
 					return flag;
 				}
-				System.out.println(flag);
 			}
-		//System.out.println("returning " + flag);
 		return flag;
 		}
-		
 		public boolean checkForNull(int playerTurnCount, int MaxPlays) {
 			boolean flag = false;
-			//System.out.println("Checks for null");
 			
 			if(playerTurnCount == (MaxPlays-1)) {
 				flag = true;
@@ -226,7 +211,14 @@ public class TicsTacsToes {
 			}
 			return flag;
 		}
-
-			
+		
+		public void welcomeMessage() {
+			System.out.println("Welcome to TicTacToe");
+		}
+		public void goodbyeMessage() {
+			System.out.println();
+			System.out.println("Have a good one Sailor.");
+			System.out.println();
+		}
 }
 

@@ -7,25 +7,21 @@ public class P1 {
 		
 		Scanner kbd = new Scanner(System.in);
 		int MAX = 3;
-		//String[] players = players();
+		String input;
+		char repeat;
+		String[][] gameboardArray = new String[MAX][MAX];
 		System.out.println("Beginning");
 		TicsTacsToes game = new TicsTacsToes(kbd, MAX);
-		//TicTacToe.displayGameBoard(MAX, playsArray);
-		//row = playerX.row();
-		//row = playerO.row();
-		//TicTacToe.displayGameBoard();
 		
+		game.welcomeMessage();
+		do{
+		game.gamePlay(kbd, gameboardArray);
+		System.out.println("Repeat Game? (y/n): ");
+		input = kbd.nextLine();
+		repeat = input.charAt(0);
+		} while (repeat == 'y' || repeat == 'Y');
+		game.goodbyeMessage();
 	}
-		/*
-		public static String[] players() {
-			final int MAX = 2;
-			String[] players = new String[MAX];
-			
-			players[0] = "X";
-			players[1] = "O";
-			
-			return players;
-			*/
 }
 		
 		
