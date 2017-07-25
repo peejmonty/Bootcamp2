@@ -24,12 +24,12 @@ public class P1 {
 			
 			//Creates an array to hold player's moves.
 			int MAX = 3;
-			String player1 = "X";
-			String player2 = "O";
+			String PLAYER1 = "X";
+			String PLAYER2 = "O";
 			
 			
 			//creates an object to call TicTacToe class
-			TicTacToe game = new TicTacToe(kbd, MAX, player1, player2);
+			TicTacToe game = new TicTacToe(kbd, MAX, PLAYER1, PLAYER2);
 			
 			welcomeMessage();
 			play(MAX, kbd, game);
@@ -42,7 +42,7 @@ public class P1 {
 		public static void welcomeMessage() {
 			System.out.println("Welcome to TicTacToe");
 			System.out.println("Each user will have a turn to place their piece by "
-					+ "saying where in the board they'd like to place.");
+					+ "\nsaying where in the board they'd like to place.");
 			System.out.println();
 		}
 		

@@ -15,36 +15,33 @@ import java.util.Scanner;
  * @author Phillip J Viens
  *
  */
-
 public class TicTacToe {
 	
-	/**
-	 * Scanner that is taken from variable at P1
-	 */
-	public Scanner kbd;
+	private Scanner kbd;				//scanner for player input
+	private int max;					//max for the size of board
+	private String[][] gameboardArray;	//Array for moves
+	private int newMax;					//max for checkBottomToTop method.
+	private int maxNumberOfPlays;		//holds MAX for checkForNull method
+	private int playTurnCounter;		//counts the current play for modulo.
+	private int gamePieceCounter;		//counts the presence of player's move
+	private String player;				//Holds the string for Xs & Os
+	private int row;					//holds the row var for player move.
+	private int col;					//holds the col var for player move.
+	private String player1;				//holds the String for player1
+	private String player2;				//holds the String for player2
 	
 	/**
-	 * maximum also taken from variable at P1.
-	 */
-	public  int max;
-	private String[][] gameboardArray;
-	private int newMax;				//holds MAX for checkBottomToTop method.
-	private int maxNumberOfPlays;	//holds MAX for checkForNull method
-	private int playTurnCounter;	//counts the current play for modulo.
-	private String player;			//Holds the string for Xs & Os
-	private int row;				//holds the row variable for player move.
-	private int col;				//holds the col variable for player move.
-	private String player1;			//holds the String for player1
-	private String player2;			//holds the String for player2
-	/**
-	 * The Constructor. Will take in the size of the TicTacToe Board.
+	 * In the constructor I've declared the size of the board, the Scanner,
+	 * the variables for both player1 and player2
 	 * 
 	*/
-	public TicTacToe(Scanner kbd, int MAX, String player1, String player2) {
-		this.gameboardArray = new String[MAX][MAX];
+	public TicTacToe(Scanner kbd, int max, String player1, String player2) {
+		
+		//declares the gameboardArray
+		this.gameboardArray = new String[max][max];
 		
 		this.kbd = kbd;				//creates new variable for Scanner
-		this.max = MAX;				//creates new variable for max.
+		this.max = max;				//creates new variable for max.
 		this.player1 = player1;		//creates new variable for player1
 		this.player2 = player2;		//creates new variable for player2
 	}
@@ -83,10 +80,11 @@ public class TicTacToe {
 			col = this.kbd.nextInt();
 			checkColumnBounds();
 			this.kbd.nextLine();
-			checkForOverlap();
+			
 			//Checks to see if space has already been played.
-			//repeats if it's not null.
-			//sets player's move
+			checkForOverlap();
+			
+			//places the players move
 			this.gameboardArray[row][col] = player;
 			
 			//shows updated gameboard
@@ -104,6 +102,7 @@ public class TicTacToe {
 	public void displayGameBoard() {
 		int i;	//variables for loops
 		int l;	//variables for loops
+		
 		System.out.println();
 		System.out.print(" ");
 		
@@ -189,16 +188,15 @@ public class TicTacToe {
 	 * @return boolean true/false
 	 */
 	public boolean checkColumns() {
-		int flagCounter;
 		for(int i = 0; i < max; i++) {
-			flagCounter = 0;
+			 gamePieceCounter = 0;
 			
 			//For loops that check through columns and rows.
 			for (int l = 0; l < max; l ++){
 				if (this.gameboardArray[l][i] == player) {
-					flagCounter ++;	
+					gamePieceCounter ++;	
 				}
-				if (flagCounter == max) {
+				if (gamePieceCounter == max) {
 					return true;
 				}
 			}
@@ -214,16 +212,14 @@ public class TicTacToe {
 	 * @return boolean true/false
 	 */
 	private boolean checkRows() {
-		int flagCounter = 0;
-		
 		//for loops that check through columns and rows.
 		for(int i = 0; i < max; i++) {
-			flagCounter = 0;
+			gamePieceCounter = 0;
 			for (int l = 0; l < max; l ++){
 				if (this.gameboardArray[i][l] == player) {
-					flagCounter ++;	
+					gamePieceCounter ++;	
 				}
-				if (flagCounter == max) {
+				if (gamePieceCounter == max) {
 					return true;
 				}
 			}
@@ -240,13 +236,12 @@ public class TicTacToe {
 	 * @return boolean true/false
 	 */
 	private boolean checkTopToBottom() {
-		int flagCounter = 0;
-		int i;
-		for(i = 0; i < max; i++) {
+		gamePieceCounter = 0;
+		for(int i = 0; i < max; i++) {
 				if (this.gameboardArray[i][i] == player) {
-					flagCounter ++;	
+					gamePieceCounter ++;	
 				}
-				if (flagCounter == max) {
+				if (gamePieceCounter == max) {
 					return true;
 				}
 			}
@@ -262,14 +257,13 @@ public class TicTacToe {
 	 * @return boolean true/false
 	 */
 	private boolean checkBottomToTop() {
-		int flagCounter = 0;
+		gamePieceCounter = 0;
 		newMax = max - 1;
-		int i;
-		for (i = newMax; i >= 0; i--) {
+		for (int i = newMax; i >= 0; i--) {
 			if (this.gameboardArray[newMax-i][i] == player) {
-				flagCounter ++;
+				gamePieceCounter ++;
 			}
-			if (flagCounter == max) {
+			if (gamePieceCounter == max) {
 				return true;
 			}
 		}
