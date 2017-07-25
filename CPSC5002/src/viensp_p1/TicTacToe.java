@@ -1,34 +1,52 @@
-package viensp_p1;
 /*
 * CPSC 5002, Seattle University
 * This is free and unencumbered software released into the public domain
 */
+package viensp_p1;
+
 import java.util.Scanner;
 
 /**
- * 
+ * TicTacToe class that has two users input coordinates on a 2D array.
+ * Once coordinates are taken in. A a X or an O is placed on the corresponding
+ * spot. through a series of methods. The game board is checked for a winner and 
+ * displayed after each turn. If a winner has been declared the game ends.
+ * If the game reaches the max amount of plays the game also ends. 
  * @author Phillip J Viens
  *
  */
+
 public class TicTacToe {
-	public String[][] gameboardArray;
-	public Scanner kbd;				//holds the Scanner
-	public  int MAX;				//hold the MAX number of rows & cols.
-	private int NEWMAX;				//holds MAX for checkBottomToTop method.
-	private int MaxNumberOfPlays;	//holds MAX for checkForNull method
+	
+	/**
+	 * Scanner that is taken from variable at P1
+	 */
+	public Scanner kbd;
+	
+	/**
+	 * maximum also taken from variable at P1.
+	 */
+	public  int max;
+	private String[][] gameboardArray;
+	private int newMax;				//holds MAX for checkBottomToTop method.
+	private int maxNumberOfPlays;	//holds MAX for checkForNull method
 	private int playTurnCounter;	//counts the current play for modulo.
-	private String player;			//Holds the string for Xs & Os.
-	private boolean flag;			//holds the boolean var for do/while
+	private String player;			//Holds the string for Xs & Os
 	private int row;				//holds the row variable for player move.
 	private int col;				//holds the col variable for player move.
-	
+	private String player1;			//holds the String for player1
+	private String player2;			//holds the String for player2
 	/**
 	 * The Constructor. Will take in the size of the TicTacToe Board.
 	 * 
 	*/
-	public TicTacToe(Scanner kbd, int MAX) {
-		this.kbd = kbd;		//creates new variable rules out shadowing.
-		this.MAX = MAX;		//creates new variable rules out shadowing.
+	public TicTacToe(Scanner kbd, int MAX, String player1, String player2) {
+		this.gameboardArray = new String[MAX][MAX];
+		
+		this.kbd = kbd;				//creates new variable for Scanner
+		this.max = MAX;				//creates new variable for max.
+		this.player1 = player1;		//creates new variable for player1
+		this.player2 = player2;		//creates new variable for player2
 	}
 	
 	/**
@@ -36,98 +54,86 @@ public class TicTacToe {
 	 * between users each time. Using the CheckForWinner method. 
 	 * The board is monitored for winner. 
 	 * @param kbd is a scanner that allows user to input the move
-	 * @param gameboardArray takes in the array of the gameboard moves
 	 */
-	public void gamePlay(Scanner kbd, String[][] gameboardArray) {
+	public void gamePlay() {
 		playTurnCounter = 0;
-		MaxNumberOfPlays = (MAX*MAX);
+		maxNumberOfPlays = (max*max);
 		
 		//creates new Array for every new game.
-		gameboardArray = new String[MAX][MAX];
-		System.out.println();
-		displayGameBoard(gameboardArray);
+		this.gameboardArray = new String[max][max];
+		displayGameBoard();
 		
 		//do/while that repeats as long as flag == false.
 		do {
 			//checks to see who's turn it is.
 			if (playTurnCounter % 2 == 0) {
-				player = "X";
+				player = this.player1;
 			}
 			else {
-				player = "O";
+				player = this.player2;
 			}
 			System.out.println(player + ", it's your turn.");
 			
 			//Has use input row and column they'd like to make a move in.
+			//Checks to ensure it's within bounds.
 			System.out.print("Which Row: ");
-			row = kbd.nextInt();
-			System.out.print("Which col: ");
-			col = kbd.nextInt();
-			kbd.nextLine();
-			
+			row = this.kbd.nextInt();
+			checkRowBounds();
+			System.out.print("Which Column: ");
+			col = this.kbd.nextInt();
+			checkColumnBounds();
+			this.kbd.nextLine();
+			checkForOverlap();
 			//Checks to see if space has already been played.
 			//repeats if it's not null.
-			while (gameboardArray[row][col] == "X" 
-					|| gameboardArray[row][col] == "O") {
-				System.out.println("Space already used... Cheater");
-				System.out.print("Which Row: ");
-				row = kbd.nextInt();
-				System.out.print("Which Column: ");
-				col = kbd.nextInt();
-				kbd.nextLine();
-			}
-			
 			//sets player's move
-			gameboardArray[row][col] = player;
-			System.out.println();
+			this.gameboardArray[row][col] = player;
 			
 			//shows updated gameboard
-			displayGameBoard(gameboardArray);
+			displayGameBoard();
 			
 			//checks to see if winner has been found
 			//or if any space is null
-			flag = checkForWinner(playTurnCounter, MaxNumberOfPlays, 
-					gameboardArray, player);
 			playTurnCounter ++;
-		} while(flag == false);
+		} while(checkForWinner() == false);
 	}
 	
 	/**
-	 * displays the TicTacToe grid and all moves made within the grid.
-	 * @param gameboardArray takes in the Array of moves by each player
+	 * displays the TicTacToe grid and all moves made within the grid
 	 */
-	public void displayGameBoard(String[][] gameboardArray) {
+	public void displayGameBoard() {
 		int i;	//variables for loops
 		int l;	//variables for loops
+		System.out.println();
 		System.out.print(" ");
 		
 		// prints the column number
-		for (i = 0; i < MAX; i++)
+		for (i = 0; i < max; i++)
 		{
 			System.out.printf("%4s", i);
 		}
 		System.out.println();
 		
 		// prints the row numbers
-		for(i = 0; i < MAX; i++) {
+		for(i = 0; i < max; i++) {
 			System.out.print(i + ".|");
 
 			// prints the rows including spaces and gameboardArray.
-			for(l = 0; l < MAX; l++) {
+			for(l = 0; l < max; l++) {
 				
 				//checks to see if any spaces are null.
-				if (gameboardArray[i][l] == null)
+				if (this.gameboardArray[i][l] == null)
 				{
 					System.out.print("   |");
 				}
 				else
 				{
-				System.out.print(" " + gameboardArray[i][l] + " |");
+				System.out.print(" " + this.gameboardArray[i][l] + " |");
 				}
 			}
 			System.out.println();
 			System.out.print("  -");
-			for(l = 0; l < MAX; l++) {
+			for(l = 0; l < max; l++) {
 				System.out.print("----");
 			}
 			System.out.println();
@@ -137,41 +143,36 @@ public class TicTacToe {
 	/**
 	 *  Method that passes variables to other check methods. This determines 
 	 *  if a winner has been found after each turn.
-	 * @param playTurnCounter  Counter variable that is passed to checkForNull
-	 * @param MaxNumberOfPlays 
-	 * @param gameboardArray
-	 * @param player
 	 * @return boolean true/false
 	 */
-	public boolean checkForWinner(int playTurnCounter, int MaxNumberOfPlays, 
-			String[][] gameboardArray, String player) {
+	public boolean checkForWinner() {
 		
 			//calls checkRows method returns boolean.
-			if (checkRows(gameboardArray, player)){
+			if (checkRows()){
 				winnerMessage();
 				return true;
 			}
 			
 			//calls checkColumns method returns boolean
-			else if(checkColumns(gameboardArray, player)) {
+			else if(checkColumns()) {
 				winnerMessage();
 				return true;
 			}
 			
 			//calls check diagonal TopToBottom method returns boolean.
-			else if(checkTopToBottom(gameboardArray, player)) {
+			else if(checkTopToBottom()) {
 				winnerMessage();
 				return true;
 			}
 			
 			//calls check diagonal bottomToTop method returns boolean.
-			else if(checkBottomToTop(gameboardArray, player)) {
+			else if(checkBottomToTop()) {
 				winnerMessage();
 				return true;
 			}
 			
 			//calls checkForNull method and returns boolean
-			else if(checkForNull()) {
+			else if(checkForMaxMoves()) {
 				catMessage();
 				return true;
 			}
@@ -187,17 +188,17 @@ public class TicTacToe {
 	 * @param player Checks for the string of the player for it's presence.
 	 * @return boolean true/false
 	 */
-	public boolean checkColumns( String[][] gameboardArray, String player) {
+	public boolean checkColumns() {
 		int flagCounter;
-		for(int i = 0; i < MAX; i++) {
+		for(int i = 0; i < max; i++) {
 			flagCounter = 0;
 			
 			//For loops that check through columns and rows.
-			for (int l = 0; l < MAX; l ++){
-				if (gameboardArray[l][i] == player) {
+			for (int l = 0; l < max; l ++){
+				if (this.gameboardArray[l][i] == player) {
 					flagCounter ++;	
 				}
-				if (flagCounter == MAX) {
+				if (flagCounter == max) {
 					return true;
 				}
 			}
@@ -212,17 +213,17 @@ public class TicTacToe {
 	 * @param player Checks for the string of the player for it's presence.
 	 * @return boolean true/false
 	 */
-	public boolean checkRows(String[][] gameboardArray, String player) {
+	private boolean checkRows() {
 		int flagCounter = 0;
 		
 		//for loops that check through columns and rows.
-		for(int i = 0; i < MAX; i++) {
+		for(int i = 0; i < max; i++) {
 			flagCounter = 0;
-			for (int l = 0; l < MAX; l ++){
-				if (gameboardArray[i][l] == player) {
+			for (int l = 0; l < max; l ++){
+				if (this.gameboardArray[i][l] == player) {
 					flagCounter ++;	
 				}
-				if (flagCounter == MAX) {
+				if (flagCounter == max) {
 					return true;
 				}
 			}
@@ -238,14 +239,14 @@ public class TicTacToe {
 	 * @param player Checks for the string of the player for it's presence.
 	 * @return boolean true/false
 	 */
-	public boolean checkTopToBottom(String[][] gameboardArray, String player) {
+	private boolean checkTopToBottom() {
 		int flagCounter = 0;
 		int i;
-		for(i = 0; i < MAX; i++) {
-				if (gameboardArray[i][i] == player) {
+		for(i = 0; i < max; i++) {
+				if (this.gameboardArray[i][i] == player) {
 					flagCounter ++;	
 				}
-				if (flagCounter == MAX) {
+				if (flagCounter == max) {
 					return true;
 				}
 			}
@@ -260,15 +261,15 @@ public class TicTacToe {
 	 * @param player Checks for the string of the player for it's presence.
 	 * @return boolean true/false
 	 */
-	public boolean checkBottomToTop(String[][] gameboardArray, String player) {
+	private boolean checkBottomToTop() {
 		int flagCounter = 0;
-		NEWMAX = MAX - 1;
+		newMax = max - 1;
 		int i;
-		for (i = NEWMAX; i >= 0; i--) {
-			if (gameboardArray[NEWMAX-i][i] == player) {
+		for (i = newMax; i >= 0; i--) {
+			if (this.gameboardArray[newMax-i][i] == player) {
 				flagCounter ++;
 			}
-			if (flagCounter == MAX) {
+			if (flagCounter == max) {
 				return true;
 			}
 		}
@@ -280,13 +281,8 @@ public class TicTacToe {
 	 * If the board is full. It returns a false variable and ends the game.
 	 * @return boolean true/false
 	 */
-	public boolean checkForNull() {
-		
-			//Checks to see if maxNumber of plays has been met.
-			if(playTurnCounter == (MaxNumberOfPlays-1)) {
-				return true;
-			}
-			return false;
+	private boolean checkForMaxMoves() {
+			return playTurnCounter == (maxNumberOfPlays);
 		}
 		
 	/**
@@ -307,18 +303,44 @@ public class TicTacToe {
 	}
 	
 	/**
-	 * Welcome message that is displayed at the beginning of the game.
+	 * Checks the row value to make sure its within the array
 	 */
-	public void welcomeMessage() {
-		System.out.println("Welcome to TicTacToe");
+	public void checkRowBounds() {
+		while (row >= max || row < 0) {
+			System.out.println("Row out of bounds");
+			System.out.print("Which Row: ");
+			row = this.kbd.nextInt();
+		}
 	}
+	
 	/**
-	 * Goodbye message that is displayed if game is not repeated.
+	 * Checks the col value to make sure its within the array
 	 */
-	public void goodbyeMessage() {
-		System.out.println();
-		System.out.println("Have a good one Sailor.");
-		System.out.println();
+	public void checkColumnBounds() {
+		while (col >= max || col < 0) {
+			System.out.println("Column out of bounds");
+			System.out.print("Which Column: ");
+			col = this.kbd.nextInt();
+		}
+	}
+	
+	/**
+	 *  Checks to see if gameboard[row][col] has a play on it
+	 *  already. Has the user repeat if there is.
+	 */
+	public void checkForOverlap() {
+		while (this.gameboardArray[row][col] == "X" 
+				|| this.gameboardArray[row][col] == "O") {
+			System.out.println("Space already used... Cheater");
+			System.out.print("Which Row: ");
+			row = this.kbd.nextInt();
+			checkRowBounds();
+			System.out.print("Which Column: ");
+			col = this.kbd.nextInt();
+			checkColumnBounds();
+			this.kbd.nextLine();
+		}
 	}
 }
+
 
