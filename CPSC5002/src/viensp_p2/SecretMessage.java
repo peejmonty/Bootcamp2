@@ -24,12 +24,12 @@ public class SecretMessage {
 		
 		Scanner kbd = new Scanner(System.in);
 		
-		//welcomeMessage();
+		welcomeMessage();
 		String filename = fileTime(kbd);
 		isValidFile(filename, kbd);
 		MessageDecoder message = new MessageDecoder();
 		message.sortLinkedList(filename);
-		//message.getPlainTextMessage();
+		message.getPlainTextMessage();
 		MessageDecoder.printLinkedList();
 		goodbyeMessage();
 	}
