@@ -17,20 +17,26 @@ public class SecretMessage {
 	/**
 	 * main method that calls welcome message
 	 * grabs a file name, and checks to see if the file is valid. 
-	 * creates an object.
+	 * creates an object. Calls the MessageDecoder Class.
+	 * Allows user to repeat as desired.
 	 * Then prints a short goodbye message.
 	 */
 	public static void main(String[] args) throws IOException{
 		
-		Scanner kbd = new Scanner(System.in);
+		Scanner kbd = new Scanner(System.in);                                                                           
+		String input; 		//input for the repeat function
+		char repeat;		//repeat for the input function
 		
 		welcomeMessage();
-		String filename = fileTime(kbd);
-		isValidFile(filename, kbd);
-		MessageDecoder message = new MessageDecoder();
-		message.sortLinkedList(filename);
-		message.getPlainTextMessage();
-		MessageDecoder.printLinkedList();
+		do{
+			String filename = ValidFile(kbd);
+			MessageDecoder message = new MessageDecoder(filename, kbd);
+			message.sortLinkedList();
+			printResults(message);
+			System.out.print("\nWould you like to repeat(y/n): ");
+			input = kbd.nextLine();
+			repeat = input.charAt(0);
+		}while(repeat == 'y' || repeat == 'Y');
 		goodbyeMessage();
 	}
 	
@@ -39,9 +45,10 @@ public class SecretMessage {
 	 */
 	public static void welcomeMessage() {
 		System.out.println("This program reads an encoded message from a "
-				+ "\nfile supplied by the user and displays the contents of"
-				+ " \nthe message before it was encoded.\n");
-
+				+ "\nfile supplied by the user. In a linked list the file "
+				+ "\nis decoded nand thecontents are displayed. An error "
+				+ "\nmessage occurs if the file is formatted incorrectly the "
+				+ "\nmessage once its been decoded.\n");
 	}
 	
 	/**
@@ -53,32 +60,36 @@ public class SecretMessage {
 	}
 	
 	/**
-	 * has user input a file path.
-	 * @param kbd is a Scanner that allows user to input file name. 
-	 * @return returns the filename
+	 * Has the user input a filename. Then using input validation 
+	 * checks to ensure the file exists and has data.
+	 * @param kbd is the scanner for the user input for fileTime method.
+	 * @return filename String for the filename that is then sent to the
+	 * MessageDecoder class in the main method.
 	 */
-	public static String fileTime(Scanner kbd) throws IOException {
-		System.out.print("Enter Secret File Name: ");
+	private static String ValidFile(Scanner kbd) throws IOException {
+		System.out.print("\nEnter Secret File Name: ");
 		String filename = kbd.nextLine();
-		
-		return filename;
+	    File path = new File(filename);
+	    boolean isValid = path.exists() && !path.isDirectory();
+	    while(!isValid){
+	    	System.out.println("Sorry that file is not valid.");
+	    	System.out.print("Enter Secret File Name: ");
+	    	filename = kbd.nextLine();
+	    	path = new File(filename);
+	    	isValid = path.exists() && !path.isDirectory();
+	    }
+	    return filename;
 	}
 	
 	/**
-	 * Checks to see if the file name is valid. While file is not
-	 * valid program has user put it in a new that is.
-	 * @param filename is the string for the file.
-	 * @param kbd is the scanner for the user input for fileTime method.
-	 * @return boolean isValid if boolean == true.
+	 * Using the getPlainTextMessage method from the instance message,
+	 * This method displays either the de-scrambled LinkedList or
+	 * an error message saying that the file ins Malformed.
+	 * @param MessageDecoder message takes in the message instance of the
+	 * MessageDecoder object.
 	 */
-	private static boolean isValidFile(String filename, Scanner kbd) throws IOException {
-	    File path = new File(filename);
-	    boolean isValid = path.exists() && !path.isDirectory();
-	    while(!isValid) {
-	    	System.out.println("Sorry that file is not valid.");
-	    	
-	    	fileTime(kbd);
-	    }
-	    return isValid;
+	public static void printResults(MessageDecoder message) {
+		System.out.println();
+		System.out.println(message.getPlainTextMessage());
 	}
 }

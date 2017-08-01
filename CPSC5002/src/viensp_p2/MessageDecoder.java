@@ -1,4 +1,5 @@
 package viensp_p2;
+
 /*
 * CPSC 5002, Seattle University
 * This is free and unencumbered software released into the public domain.
@@ -7,46 +8,46 @@ import java.io.*;
 import java.util.Scanner;
 
 /**
- * MessageDecoder class that takes in a secret message and
- * deScrambles the linked list.
- * \
+ * MessageDecoder class that takes in a secret message and deScrambles the
+ * linked list.
  * @author Phillip J Viens
  *
  */
 public class MessageDecoder {
+
 	/**
-	 * TODO
+	 * filename String that is taken when the use inputs in SecretMessage Class
 	 */
 	public String filename;
+
 	/**
-	 * TODO
+	 * Takes in the Scanner from the SecretMessage class.
 	 */
 	public Scanner kbd;
-	private static Node head = null;
-	private int number;
-	private char letter;
-	private String fullLine;
-	private boolean isMalformed;
-	
+	private static Node head = null; 	// head Node for LinkedList
+	private int number; 				// int number for the number value.
+	private char letter; 				// char for the secretMessage.
+	private String stringLine; 			// temp string to take in full line.
+	private boolean malformed; 			// boolean checks if linked list is malformed.
+	private String results; 			// String that gets sent to secretMessage Class
+
 	/**
 	 * Constructor
-	 * @param filename takes in the filename string 
-	 * @param kbd
+	 * @param filename takes in the filename string
+	 * @param kbd takes in the scanner.
 	 */
 	public MessageDecoder(String filename, Scanner kbd) {
 		this.filename = filename;
 		this.kbd = kbd;
-		isMalformed = isMalformed();
-		
-		
+		malformed = isMalformed();
 	}
-	
+
 	/**
 	 * Nested class for the Nodes.
 	 *
 	 */
 	private class Node {
-			
+
 		private int number;
 		private char letter;
 		private Node next;
@@ -61,167 +62,110 @@ public class MessageDecoder {
 			number = numbers;
 			letter = letters;
 			this.next = next;
-			
-		}	
+		}
 	}
-	
+
 	/**
-	 * opens the Scanner file to read the list. Then using
-	 * the insertInOrder method sorts the data. 
+	 * opens the Scanner file to read the list. Then using the insertInOrder
+	 * method sorts the data.
 	 * @throws IOException
 	 */
-	public void sortLinkedList() 
-			throws IOException {
-		
-		//opens and scans the file.
+	public void sortLinkedList() throws IOException {
+
+		// opens and scans the file.
 		File file = new File(filename);
 		Scanner inputFile = new Scanner(file);
-		
-		//reads values from the file.
-		while(inputFile.hasNext()){
-			fullLine = inputFile.nextLine();
-			System.out.println(fullLine);
-			letter = fullLine.charAt(0);
-			kbd = new Scanner(fullLine);			
-			
-			//if letter is blank
-			//pointer moves on to the next integer. 
+
+		// reads values from the file.
+		while (inputFile.hasNext()) {
+			stringLine = inputFile.nextLine();
+			letter = stringLine.charAt(0);
+			kbd = new Scanner(stringLine);
+
+			// if letter is blank
+			// pointer moves on to the next integer.
 			if (letter != ' ') {
 				kbd.next();
-				if(kbd.hasNextInt()){
+				if (kbd.hasNextInt()) {
 					number = kbd.nextInt();
-					if(number < 0)
-						isMalformed = true;
-					
-				}
-				else
-					isMalformed= true;
-			}
-			else {
-				if(kbd.hasNextInt()){
+					if (number < 0)
+						malformed = true;
+				} else
+					malformed = true;
+			} else {
+				if (kbd.hasNextInt()) {
 					number = kbd.nextInt();
-					//TODO More tests to ensure you can go without that.
-					//if(number < 0) {
-						//System.out.println("Malformed3");
-					//}
-					//else {
-						//System.out.println("Malformed4");
-					//}
 				}
-			
-			//removeDuplicates();
 			}
 			insertInOrder();
 		}
 		checkForDuplicates();
 		inputFile.close();
-		
-		
-		
 	}
-	
+
 	/**
-	 * Takes in the values of the integers and 
-	 * sorts them in non descending order
-	*/
-	private void insertInOrder() throws IOException {
-		
-		//Checks to see if the head is null
-		//If not puts a new node there
-		if(head == null || head.number >= number ) {
+	 * Takes in the values of the integers and sorts them in non descending
+	 * order
+	 */
+	private void insertInOrder() {
+
+		// Checks to see if the head is null
+		// If not puts a new node there
+		if (head == null || head.number >= number) {
 			head = new Node(letter, number, head);
 		}
-		
-		//Checks to see if the next node is less than the integer
-		//if so puts the new node in the next space. 
+
+		// Checks to see if the next node is less than the integer
+		// if so puts the new node in the next space.
 		else {
 			Node p = head;
-			
-			//TODO fix while loop and break statement
-			do
-			{
-				if (p.next == null || p.next.number >= number)
-				{
-					// Insert the node into the list
-					Node newNode = new Node(letter, number, p.next);
-					p.next = newNode;
-					// Insert done
-					break;
-				}
-				else
-				{  
-					// if neither of those parameters are met
-					//pointer moves to the next node.
-					p = p.next;
-				}
-			}while (true);
+			while (p.next != null && p.next.number < number)
+				p = p.next;
+
+			p.next = new Node(letter, number, p.next);
 		}
 	}
-	
+
 	/**
-	 * A toString method that takes the list and
-	 * @return
+	 * That returns a parsed method to stay within 80 characters
+	 * @return parsedResults that starts a new line after 78.
 	 */
 	public String getPlainTextMessage() {
-		String results = "";
-		if (isMalformed) {
-			results = "File is Malformed. "
-					+ "Please fix all duplicates, "
-					+ "missing or negative integers";
+		results = "";
+
+		// Checks to see if the message is malformed
+		// returns error message if so.
+		if (malformed) {
+			results = "File is Malformed. " + "Please fix all duplicates, " + "missing or negative integers";
 		}
-		else{
+		// else returns the results of the Decoded Message.
+		else {
 			for (Node p = head; p != null; p = p.next) {
-				//p = p.next;
 				results += p.letter + " ";
 			}
 		}
-		return results;
+		String parsedResults = results.replaceAll("(.{78})", "$1\n");
+		return parsedResults;
 	}
-	
+
 	/**
-	 * Checks to see if there are duplicate integers. 
-	 * If so flags the file as Malformed.
+	 * Checks to see if there are duplicate integers. If so flags the file as
+	 * Malformed.
 	 */
-	private void checkForDuplicates() throws IOException{
-		//System.out.println();
-		//System.out.println("Linked list contents with no duplicates: ");
-		
+	private void checkForDuplicates() throws IOException {
 		for (Node p = head; p != null; p = p.next) {
-			if (p.next != null && p.number == p.next.number)
-			{
-					isMalformed=true;
+			if (p.next != null && p.number == p.next.number) {
+				malformed = true;
 			}
 		}
 	}
-	
+
 	/**
-	 * TODO
-	 * @return
+	 * If the file has any missing, duplicate, or negative integers it returns
+	 * isMalformed.
+	 * @return isMalformed if file is in correct.
 	 */
 	private boolean isMalformed() {
-		return isMalformed;
-	}
-	
-	/**
-	 * prints Linked list of integers
-	 */
-	/**
-	public static void printLinkedList() throws IOException{
-		System.out.println();
-		//System.out.println("Linked list contents after reading: ");
-		for (Node p = head; p != null; p = p.next)
-			System.out.println(p.letter + ""
-					+ " " + p.number);
-	}
-	*/
-	
-	/**
-	 * Takes in the filename that the user sets in SecretMessage
-	 * @param filename String filename that is used to open file.
-	 * @throws IOException for IOs.
-	 */
-	public void setFilename(String filename) throws IOException{
-		this.filename = filename; 
-		System.out.println(filename);
+		return malformed;
 	}
 }
