@@ -1,0 +1,29 @@
+package cpsc5002_01;
+import java.util.ArrayList;
+import java.util.EmptyStackdException;
+
+public class Quiz6<E> {
+   private ArrayList<E> stack;
+   public Quiz6() {
+   stack = new ArrayList<>();
+   }
+   
+   public boolean empty() {
+      return stack.isEmpty();
+   }
+   
+   public void push(E element) {
+      stack.add(element);
+   }
+   
+   public E peek() {
+      if(empty())
+         throw new EmptyStackException();
+      return stack.get(stack.size() - 1);
+   }
+   
+   public E pop() {
+      E element = peek();
+      return stack.remove(stack.size() - 1);
+      
+}
