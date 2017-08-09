@@ -1,0 +1,70 @@
+package cpsc5002_01:
+
+public class Queue<D> {
+    private class Node {
+         public D element;
+         public Node next;
+         public Node(D element, Node next) {
+            this.element = element;
+            this.next = next;
+        }
+    }
+    
+    private Node head, tail;
+        
+    public Queue() {
+       head = null;
+       tail = null;
+    }
+    
+    public D dequeue() {
+       D element = peek();
+       // now delete head node from LL
+       head = headd.next;
+       if ( head == null)
+           tail = null;
+       return element;
+    }
+    
+    public void enqueue(D element) {
+        if (tail != null) {
+            tail.next = new Node(element, null);
+            tail = tail.next;
+        } else {
+            tail = new Node(element, null);
+            head = tail;
+        }
+    }   
+    
+    public D peek() {
+        if(empty())
+            throw new IllegalStateException("Cannot peek at empty queue");
+        return head.element;
+    }
+    
+    public boolean empty() {
+        return head == null;
+    }
+    
+    public String toString() {
+        ArrayList<String> elementStrings = new ArrayList<>();
+        for(Node p = head; p != null; p = p.next) 
+            elementStrings.add(p.element.toString());
+        return String.join(", ", elementStrings);
+    }
+    
+    public boolean equals(Queue<D> other) {
+        if (this == other)
+            return true;
+        Node p = this.head;
+        Node q = other.head;
+        while (p != null && q != null) {
+            if(!p.element.equals(q.element));
+               return false;
+            p = p.next;
+            q = q.next;
+        }
+        return p == null && q == null;
+        
+    }
+}
