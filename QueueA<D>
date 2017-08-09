@@ -1,0 +1,57 @@
+public calss QueueA<D> {
+    public static final int MAX_SIZE = 10
+    ArrayList arr;
+    int size;
+    int front;
+    int back;
+    
+    public QueueA() {
+        arr = new Object[MAX_SIZE];
+        size = 0;
+        front = 0;
+        back = 0;
+    }
+    
+    public D dequeue() {
+        D element = peek();
+        arr[front] = null;  // to make garbage union happy
+        front = (front + 1) % arr.length;  // wrap back to zero if at end.
+        
+        return element;
+    }
+    
+    public void enqueue(D element) {
+        if (full())
+            throw new IllegalStateException("queue is full");
+        arr[back] = element; 
+    }
+    
+    @SuppressWarnings("unchecked") // I have full controll
+    public D peek() {
+        if(empty()
+            throw new IllegalStateException("cannot peek into an empty queue");
+        return (D)arr[front]; // cast to type we know it is.
+    }
+    
+    public boolean empty() {
+        return size == 0;
+    }
+    
+    public boolean full() {
+        return front == back && size > 0;
+    }
+    
+    public String toString() {
+        ArrayList <String> elementStrings = new ArrayList<>();
+        for(int i = front; i < back; i = (i + 1) % arr.length(
+            elementStrings.add(arr[i].toString());
+        return String.join(", ", elementStrings);
+    }
+    
+    public boolean equals(QueueA<D> other) {
+        //FIXME - sleezy alert- slow and relies on toString
+        String me = this.toString();
+        String them = other.toString();
+        return me.equals(them);
+    }
+}
